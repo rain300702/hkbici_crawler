@@ -5,27 +5,34 @@ import cookielib
 import re
 from bs4 import BeautifulSoup
 
+import threadManager
+
 
 class Crawler(object):
 
-    def __init__(self,args):
+    def __init__(self, args):
         self.url = 'http://hk-bici.com/forum-2-'
         self.depth = args.depth
-        # 构建header的dict结构
+        # 提供header的dict结构中的User-agent认证信息
         self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36'}
         self.keywords = args.keyword
         self.initiation = args.initiation
+        self.threadManager = threadManager.ThreadManager(args.threadNum,self.searchInfo)
 
-    def start(self):
+    def entry(self):
         if self.initiation:
             self.cookieInit()
+        self.threadManager.startThread()
         for pageIndex in range(self.depth):
-            results = self.search(self.getInfo(self.getPage(pageIndex+1)))
-            for result in results:
-                print result
-                print results[result]
+            self.threadManager.putTask(self.getPage,pageIndex+1)
+        self.threadManager.blockThread()
 
-    def search(self, info):
+    def searchInfo(self, page):
+        soup = BeautifulSoup(page)
+        elements = soup.find_all(name='a', attrs={'class': re.compile('xst')})
+        info = {}
+        for element in elements:
+            info[element.string.encode('utf-8')] = element['href']
         keylist = re.split('[\s\.\,+]', self.keywords)
         results = info.copy()
         for key in keylist:
@@ -33,15 +40,10 @@ class Crawler(object):
             for item in info:
                 if (not re.match(pattern, item)) and item in results:
                     results.pop(item)
-        return results
-
-    def getInfo(self, page):
-        soup = BeautifulSoup(page)
-        elements = soup.find_all(name='a', attrs={'class': re.compile('xst')})
-        info = {}
-        for element in elements:
-            info[element.string.encode('utf-8')] = element['href']
-        return info
+        for result in results:
+            print result
+            print results[result]
+        return False
 
     def cookieInit(self):
         # cookie存放文件

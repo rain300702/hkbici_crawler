@@ -8,7 +8,7 @@ def main():
     try:
         args = parser.parse_args()
         crawler = Crawler(args)
-        crawler.start()
+        crawler.entry()
     except KeyboardInterrupt:
         print 'Process aborted by user.'
 
