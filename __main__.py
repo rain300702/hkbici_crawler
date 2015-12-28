@@ -5,6 +5,11 @@ from cmdParser import parser
 
 
 def main():
+    '''
+    The program's main entrance, this method will create an instance of
+    class Crawler.
+    '''
+
     try:
         args = parser.parse_args()
         crawler = Crawler(args)

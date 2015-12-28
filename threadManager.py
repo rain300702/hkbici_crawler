@@ -5,6 +5,9 @@ import Queue
 
 
 class WorkingThread(threading.Thread):
+    '''
+    This class defines how threads in this program should work.
+    '''
 
     def __init__(self,threadManager):
         threading.Thread.__init__(self)
@@ -23,6 +26,9 @@ class WorkingThread(threading.Thread):
                 break
 
 class ThreadManager(object):
+    '''
+    This class manages threads created.
+    '''
 
     def __init__(self,threadNum,resultFunc):
         self.threadNum = threadNum

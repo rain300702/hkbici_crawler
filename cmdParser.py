@@ -4,6 +4,10 @@ import argparse
 
 
 def numberType(rawInput):
+    '''
+    This method defines the numeral type for depth and threadNum arguments
+    '''
+
     try:
         number = int(rawInput)
     except ValueError:
