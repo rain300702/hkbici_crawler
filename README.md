@@ -30,3 +30,4 @@ Crawler will use multiple threads to finish different tasks. Create 10 threads b
 使用请翻墙，第一次使用请加上-i选项。
 
 最近一次更新用Queue做了个线程池，队列中的任务轮流执行减少了一部分网络IO阻塞的时间；因为是翻墙所以网络IO的时间极其之长，谁有能最大程度优化这一问题的方案请告诉我，不用重写大部分代码、不用分布式（没资源）比较实际的那种。
+test
